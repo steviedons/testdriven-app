@@ -7,6 +7,7 @@ from project import db
 from project.api.models import User
 
 def add_user(username, email):
+    """This add users adds direct to the db"""
     user = User(username=username, email=email)
     db.session.add(user)
     db.session.commit()
@@ -14,6 +15,18 @@ def add_user(username, email):
 
 class TestUserService(BaseTestCase):
     """Tests for the Users Service."""
+
+    def add_user_json(self):
+        response = self.client.post(
+            '/users',
+            data=json.dumps({
+                'username': 'michael',
+                'email': 'michael@mherman.org'
+            }),
+            content_type='application/json',
+        )
+        return response
+
     def test_users(self):
         """Ensure the /ping route behaves correctly."""
         response = self.client.get('/users/ping')
@@ -24,16 +37,7 @@ class TestUserService(BaseTestCase):
 
     def test_add_user(self):
         """Ensure a new user can be added to the database."""
-        with self.client:
-            response = self.client.post(
-                '/users',
-                data=json.dumps({
-                    'username': 'michael',
-                    'email': 'michael@mherman.org'
-                }),        
-                content_type='application/json',
-            )  
-
+        response = self.add_user_json()
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertIn('michael@mherman.org was added!', data['message'])
@@ -72,23 +76,10 @@ class TestUserService(BaseTestCase):
 
     def test_add_user_duplicate_email(self):
         """Ensure error is thrown if the email already exists."""
-        with self.client:
-            self.client.post(
-                '/users',
-                data=json.dumps({
-                    'username': 'michael',
-                    'email': 'michael@mherman.org'
-                }),
-                content_type='application/json',
-            )
-        response = self.client.post(
-            '/users',
-            data=json.dumps({
-                'username': 'michael',
-                'email': 'michael@mherman.org'
-            }),
-            content_type='application/json',
-        )
+        # add the user
+        self.add_user_json()
+        # Try to add the user again
+        response = self.add_user_json()
 
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
