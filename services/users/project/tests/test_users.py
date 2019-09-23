@@ -6,12 +6,14 @@ from project.tests.base import BaseTestCase
 from project import db
 from project.api.models import User
 
+
 def add_user(username, email):
     """This add users adds direct to the db"""
     user = User(username=username, email=email)
     db.session.add(user)
     db.session.commit()
     return user
+
 
 class TestUserService(BaseTestCase):
     """Tests for the Users Service."""
@@ -42,7 +44,6 @@ class TestUserService(BaseTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('michael@mherman.org was added!', data['message'])
         self.assertIn('success', data['status'])
-
 
     def test_add_user_invalid_json(self):
         """Ensure error is thrown if the JSON object is empty."""
@@ -124,10 +125,13 @@ class TestUserService(BaseTestCase):
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(data['data']['users']), 2)
-            self.assertIn('michael', data['data']['users'][0]['username'])
-            self.assertIn('michael@mherman.org', data['data']['users'][0]['email'])
+            self.assertIn('michael',
+                          data['data']['users'][0]['username'])
+            self.assertIn('michael@mherman.org',
+                          data['data']['users'][0]['email'])
             self.assertIn('fletcher', data['data']['users'][1]['username'])
-            self.assertIn('fletcher@notreal.com', data['data']['users'][1]['email'])
+            self.assertIn('fletcher@notreal.com',
+                          data['data']['users'][1]['email'])
             self.assertIn('success', data['status'])
 
     def test_main_no_users(self):
@@ -163,6 +167,7 @@ class TestUserService(BaseTestCase):
             self.assertIn(b'<h1>All Users</h1>', response.data)
             self.assertNotIn(b'<p>No users!</p>', response.data)
             self.assertIn(b'michael', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()

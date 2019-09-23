@@ -8,8 +8,9 @@ from project import create_app
 
 app = create_app()
 
+
 class TestDevelopmentConfig(TestCase):
-    
+
     def create_app(self):
         app.config.from_object('project.config.DevelopmentConfig')
         return app
@@ -21,6 +22,7 @@ class TestDevelopmentConfig(TestCase):
             app.config['SQLALCHEMY_DATABASE_URI'] ==
             os.environ.get('DATABASE_URL')
         )
+
 
 class TestTestingConfig(TestCase):
 
@@ -37,8 +39,9 @@ class TestTestingConfig(TestCase):
             os.environ.get('DATABASE_TEST_URL')
         )
 
+
 class TestProductionConfig(TestCase):
-    
+
     def create_app(self):
         app.config.from_object('project.config.ProductionConfig')
         return app
@@ -46,6 +49,7 @@ class TestProductionConfig(TestCase):
     def test_app_is_production(self):
         self.assertTrue(app.config['SECRET_KEY'] == 'my_precious')
         self.assertFalse(app.config['TESTING'])
+
 
 if __name__ == '__main__':
     unittest.main()
