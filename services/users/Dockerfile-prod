@@ -15,5 +15,9 @@ RUN pip install -r requirements.txt
 COPY ./entrypoint-prod.sh /usr/src/app/entrypoint-prod.sh
 # add app
 COPY . /usr/src/app
+
+# Set the file as executable
+RUN chmod +x entrypoint-prod.sh
+
 # run server
 CMD ["./entrypoint-prod.sh"]

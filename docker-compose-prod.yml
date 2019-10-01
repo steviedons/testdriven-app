@@ -46,7 +46,7 @@ services:
     build:
       context: ./services/client
       dockerfile: Dockerfile-prod
-    args:
+      args:
       - NODE_ENV=production
       - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
     ports:
