@@ -1,5 +1,6 @@
 {
-    "python.pythonPath": "~/Games/testdriven-app/services/users/project/env/bin",
+    "python.pythonPath": "/home/steve/testdriven-app/myenv/bin/python3",
     "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false
 }
